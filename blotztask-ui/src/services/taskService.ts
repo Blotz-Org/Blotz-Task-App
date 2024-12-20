@@ -34,6 +34,28 @@ export const fetchTaskItemsDueToday = async (): Promise<TaskDTO[]> => {
     return result;
   };
 
+  export const completeTaskForToday = async (taskId : number): Promise<string> => {
+
+    try {
+      const result = await fetchWithAuth<string>(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL_WITH_API}/Task/CompleteTask/${taskId}`,
+      {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+      }
+      );
+    
+      return result;
+      
+    } catch (error) {
+      console.error("Error completing task:", error);
+      return "Error completing task.";
+    } 
+    
+  };
+
   export const fetchMonthlyStats = async (year: number, month: number): Promise<MonthlyStatDTO> => {
       const getCookie = (name: string): string | null => {
       const cookies = document.cookie.split("; ");

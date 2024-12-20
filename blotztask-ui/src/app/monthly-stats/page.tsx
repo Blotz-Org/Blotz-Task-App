@@ -53,10 +53,6 @@ export default function Monthlystats() {
     fetchStats();
   }, []);
 
-  if (totalTasks === 0 && totalUncompleted === 0) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div>
       <div className="flex flex-col gap-5 md:items-center md:p-10">
