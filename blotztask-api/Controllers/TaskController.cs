@@ -51,6 +51,13 @@ namespace BlotzTask.Controllers
         [HttpGet("due-date/{date}")]
         public async Task<IActionResult> GetTaskByDate(DateOnly date)
         {
+            var userId = HttpContext.Items["UserId"] as string;
+
+            if (userId == null)
+            {
+                throw new UnauthorizedAccessException("Could not find user id from Http Context");
+            }
+
             return Ok(await _taskService.GetTaskByDate(date));
         }
 
