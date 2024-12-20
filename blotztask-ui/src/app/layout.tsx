@@ -37,7 +37,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <MainNav className='h-1/6' />
+            <MainNav />
             <section className="container mx-auto px-12 pt-8 h-5/6">
               {children}
             </section>
