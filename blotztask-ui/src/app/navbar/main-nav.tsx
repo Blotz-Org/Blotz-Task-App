@@ -4,7 +4,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import styles from './main-nav.module.css';
 
-export function MainNav({}: React.HTMLAttributes<HTMLElement>) {
+export function MainNav() {
   const { data: session } = useSession();
 
   //TODO : Do we need this ? if not remove

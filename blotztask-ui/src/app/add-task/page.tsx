@@ -1,106 +1,81 @@
 'use client';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
 import * as React from 'react';
-import { DatePickerWithRange } from './component/calendar';
+import { DatePicker } from './component/calendar';
 import { Button } from '@/components/ui/button';
+import { z } from 'zod';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import TaskTabs from './component/task-tabs';
+
+export type AddTaskForm = z.infer<typeof AddTaskFormSchema>
+
+const AddTaskFormSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  dueDate: z.date(),
+  labelId: z.number()
+})
 
 export default function Home() {
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<AddTaskForm>({
+    resolver: zodResolver(AddTaskFormSchema),
+    defaultValues: {
+      title: '',
+      description: '',
+      dueDate: undefined,
+      labelId: 1,
+    },
+  });
+
+  const onSubmit = (data: AddTaskForm) => {
+    console.log('Form Submitted:', data);
+  };
+
   return (
     <>
-      <div className="flex flex-col gap-10 mx-24">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10 mx-24">
         <Input
           className="bg-add-task-title-bg text-center text-add-task-title-text placeholder-add-task-title-placeholder"
           placeholder="Write Your Title Here"
+          {...register('title')}
+        />
+        {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+
+        <TaskTabs
+          register={register}
+          setValue={setValue}
+          watch={watch}
+          errors={errors}
         />
 
-        <Tabs defaultValue="work" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 gap-2 px-2">
-            <TabsTrigger
-              className="bg-add-task-work-label-bg text-add-task-work-label-text"
-              value="work"
-            >
-              Work
-            </TabsTrigger>
-            <TabsTrigger
-              className="bg-add-task-personal-label-bg text-add-task-personal-label-text"
-              value="personal"
-            >
-              Personal
-            </TabsTrigger>
-            <TabsTrigger
-              className="bg-add-task-academic-label-bg text-add-task-academic-label-text"
-              value="acedemic"
-            >
-              Acedemic
-            </TabsTrigger>
-            <TabsTrigger
-              className="bg-add-task-others-label-bg text-add-task-others-label-text"
-              value="others"
-            >
-              Others
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="work">
-            <div className="p-1">
-              <Card>
-                <CardContent className="space-y-2 bg-add-task-work-label-bg">
-                  <Textarea
-                    className="text-primary-dark bg-add-task-work-input-area-bg border-add-task-work-label-bg placeholder:text-center placeholder:leading-[10rem] placeholder-add-task-work-label-text"
-                    rows={10}
-                    placeholder="Type your message here."
-                  />
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-          <TabsContent value="personal">
-            <div className="p-1">
-              <Card>
-                <CardContent className="space-y-2 bg-add-task-personal-label-bg">
-                  <Textarea
-                    className="text-primary-dark bg-add-task-personal-input-area-bg border-add-task-personal-label-bg placeholder:text-center placeholder:leading-[10rem]  placeholder-add-task-personal-label-text"
-                    rows={10}
-                    placeholder="Type your message here."
-                  />
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-          <TabsContent value="acedemic">
-            <div className="p-1">
-              <Card>
-                <CardContent className="space-y-2 bg-add-task-academic-label-bg">
-                  <Textarea
-                    className="text-primary-dark bg-add-task-academic-input-area-bg border-add-task-academic-label-bg placeholder:text-center placeholder:leading-[10rem] placeholder-add-task-academic-label-bg"
-                    rows={10}
-                    placeholder="Type your message here."
-                  />
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-          <TabsContent value="others">
-            <div className="p-1">
-              <Card>
-                <CardContent className="space-y-2 bg-add-task-others-label-bg">
-                  <Textarea
-                    className="text-primary-dark bg-add-task-others-input-area-bg border-add-task-others-label-bg placeholder:text-center placeholder:leading-[10rem] placeholder-add-task-others-label-text"
-                    rows={10}
-                    placeholder="Type your message here."
-                  />
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
-        <div className="flex justify-between items-center w-full">
-          <DatePickerWithRange />
-          <Button>Add task</Button>
+      {/* Date Picker (Controlled via react-hook-form) */}
+      <div className="flex justify-between items-center w-full">
+        <Controller
+          name="dueDate"
+          control={control}
+          render={({ field }) => (
+            <DatePicker
+              value={field.value} // Controlled value
+              onChange={(date) => field.onChange(date)} // Update form state
+              error={errors.dueDate?.message} // Show error message
+            />
+          )}
+        />
+
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Adding...' : 'Add Task'}
+        </Button>
         </div>
-      </div>
+      </form>
     </>
   );
 }

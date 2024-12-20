@@ -78,7 +78,7 @@ builder.Services.AddCors(options =>
         {
             builder.WithOrigins("http://localhost:3000" // DEV frontend origin
                 , "https://blotz-task-app.vercel.app") // Prod frontend origin    
-                .WithMethods("GET", "POST", "OPTIONS") // Specify allowed methods, do not allow method never used.
+                .WithMethods("GET", "POST", "OPTIONS","PUT") // Specify allowed methods, do not allow method never used.
                 .WithHeaders("Content-Type", "Authorization") // Specify allowed headers,may be more headers to added.
                 .AllowCredentials(); // TODO: anti-csrf need to be built.
         });
@@ -127,8 +127,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+
 app.UseCors("AllowSpecificOrigin");
+app.UseAuthorization();
 
 app.MapSwagger().RequireAuthorization();
 app.MapControllers().RequireAuthorization();
