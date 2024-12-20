@@ -37,7 +37,7 @@ export function MainNav() {
               <span className={styles['link-underline']}>All Task</span>
             </Link>
             <Link href="/test-connection" className={styles['nav-btn']}>
-              <span className={styles['link-underline']}>Test Connection</span>
+              <span className={styles['link-underline']}>Test</span>
             </Link>
             <button
               type="button"
