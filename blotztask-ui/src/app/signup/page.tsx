@@ -10,47 +10,12 @@ import { fetchWithErrorHandling } from '@/utils/http-client';
 import { BadRequestError } from '@/model/error/bad-request-error';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { AlertDestructive } from '@/components/ui/alert-destructive';
 
 // Define Zod validation schema with custom email validation
 const signUpSchema = z.object({
-  email: z.string().refine(
-    (email) => {
-      // Split the email into parts by '@'
-      const parts = email.split('@');
-      if (parts.length !== 2) return false; // Must have exactly one '@'
-
-      const [localPart, domainPart] = parts;
-
-      // Ensure local and domain parts are not empty
-      if (!localPart || !domainPart) return false;
-
-      // Ensure the domain part contains at least one dot and valid subparts
-      const domainParts = domainPart.split('.');
-      if (
-        domainParts.length < 2 ||
-        domainParts.some((part) => part.trim() === '')
-      )
-        return false;
-
-      return true;
-    },
-    {
-      message: 'Invalid email address',
-    }
-  ),
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .max(128, 'Password must be at most 128 characters')
-    .refine((password) => /[A-Z]/.test(password), {
-      message: 'Password must contain at least one uppercase letter',
-    })
-    .refine((password) => /[a-z]/.test(password), {
-      message: 'Password must contain at least one lowercase letter',
-    })
-    .refine((password) => /[^A-Za-z0-9]/.test(password), {
-      message: 'Password must contain at least one special character',
-    }),
+  email: z.string().email(),
+  password: z.string().min(8),
 });
 
 // Define TypeScript type based on Zod schema
@@ -78,13 +43,13 @@ const SignUpPage = () => {
           body: JSON.stringify(data),
         }
       );
-      handleSuccess();
+      submitSuccess();
     } catch (error) {
-      handleError(error);
+      submitFail(error);
     }
   };
 
-  const handleError = (error: unknown) => {
+  const submitFail = (error: unknown) => {
     if (error instanceof BadRequestError) {
       if (error.details) {
         // Map server-side errors to form fields
@@ -95,20 +60,20 @@ const SignUpPage = () => {
           });
         });
       } else {
-        setError('email', {
+        setError('root', {
           type: 'server',
           message: error.message || 'An unexpected error occurred',
         });
       }
     } else {
-      setError('email', {
+      setError('root', {
         type: 'server',
         message: 'An unexpected error occurred. Please try again later.',
       });
     }
   };
 
-  const handleSuccess = () => {
+  const submitSuccess = () => {
     router.push('/signin');
     toast('Account registered', {
       description: 'You can now login with the registered account',
@@ -122,16 +87,12 @@ const SignUpPage = () => {
       <div className="flex flex-col gap-4 bg-white p-5 rounded-lg shadow-md w-4/12">
         <h1 className={styles.title}>User Sign Up</h1>
         {/* Global Error Prompt */}
-        {errors.email?.message || errors.password?.message ? (
-          <div className="text-red-500 p-4 rounded-md mb-4 border border-red-500">
-            <h2 className="font-bold text-lg">Error</h2>
-            <p>
-              {errors.email?.message ||
-                errors.password?.message ||
-                'An error occurred.'}
-            </p>
-          </div>
-        ) : null}
+        {errors?.root?.message && (
+          <AlertDestructive
+            title="Error"
+            description={errors.root.message || 'An unexpected error occurred.'}
+          />
+        )}
 
         <form onSubmit={handleSubmit(handleRegister)}>
           <div className={styles.input_group}>
@@ -159,13 +120,15 @@ const SignUpPage = () => {
               placeholder="Enter your password"
               required
             />
-            {/* Inline Error Message */}
-            {!errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password?.message}
-              </p>
-            )}
+            <div>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
           </div>
+
           <Button className="w-full" type="submit" disabled={isSubmitting}>
             {isSubmitting ? <Spinner /> : 'Sign Up'}
           </Button>

@@ -8,7 +8,7 @@
   align-items: center; /* Align items vertically centered */
   margin-bottom: 15px; /* Space between input groups */
   position: relative;
-  flex-direction: column; /* Ensure vertical alignment of input and error */
+  flex-direction: row;
 }
 
 .label {
