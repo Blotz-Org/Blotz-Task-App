@@ -7,10 +7,13 @@
   display: flex;
   align-items: center; /* Align items vertically centered */
   margin-bottom: 15px; /* Space between input groups */
+  position: relative;
+  flex-direction: row;
+  width: 100%;
 }
 
 .label {
-  flex: 1; /* Take equal space for label */
+  flex: 0.8; /* Take equal space for label */
   font-weight: bold; /* Make label bold */
 }
 
@@ -19,11 +22,15 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px; /* Rounded corners */
+  width: 100%;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
 }
 
 .error {
   color: red; /* Error message color */
   text-align: center; /* Center error message */
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
 }
 
 .submitButton {
@@ -51,4 +58,15 @@
 
 .registerLink:hover {
   text-decoration: none; /* Remove underline on hover */
+}
+.text-red-500 {
+  color: #f44336; /* Red color for the error message */
+}
+
+.text-sm {
+  font-size: 0.875rem; /* Small font size for the error message */
+}
+
+.mt-2 {
+  margin-top: 0.5rem; /* Space between input and error message */
 }
