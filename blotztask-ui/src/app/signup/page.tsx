@@ -15,7 +15,8 @@ import { AlertDestructive } from '@/components/ui/alert-destructive';
 // Define Zod validation schema with custom email validation
 const signUpSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string()
+  .min(8, 'Password must be at least 8 characters')
 });
 
 // Define TypeScript type based on Zod schema
@@ -33,7 +34,9 @@ const SignUpPage = () => {
     resolver: zodResolver(signUpSchema),
   });
 
-  const handleRegister = async (data: SignUpFormData) => {
+    const handleRegister = async (data: SignUpFormData) => {
+
+    console.log(data);
     try {
       await fetchWithErrorHandling(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/register`,
@@ -113,22 +116,19 @@ const SignUpPage = () => {
           </div>
           <div className={styles.input_group}>
             <label className={styles.label}>Password:</label>
-            <input
-              type="password"
-              {...register('password')}
-              className={styles.input}
-              placeholder="Enter your password"
-              required
-            />
-            <div>
-              {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
+              <input
+                type="password"
+                {...register('password')}
+                className={styles.input}
+                placeholder="Enter your password"
+                required
+              />
           </div>
-
+          {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           <Button className="w-full" type="submit" disabled={isSubmitting}>
             {isSubmitting ? <Spinner /> : 'Sign Up'}
           </Button>

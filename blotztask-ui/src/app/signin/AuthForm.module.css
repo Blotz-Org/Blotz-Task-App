@@ -9,10 +9,11 @@
   margin-bottom: 15px; /* Space between input groups */
   position: relative;
   flex-direction: row;
+  width: 100%;
 }
 
 .label {
-  flex: 1; /* Take equal space for label */
+  flex: 0.8; /* Take equal space for label */
   font-weight: bold; /* Make label bold */
 }
 
