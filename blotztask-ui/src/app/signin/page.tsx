@@ -42,7 +42,7 @@ const LoginPage = () => {
           message: "Login Failed. Please check you credential"
         });
       } else {
-        router.push('/task-dayview'); 
+        router.push('/today'); 
       }
     } catch (error) {
       console.error('Login failed:', error);

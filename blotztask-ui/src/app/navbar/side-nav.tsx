@@ -3,6 +3,7 @@ import { CalendarDays, Inbox, Search, Settings } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -19,18 +20,18 @@ const items = [
     icon: CalendarDays,
   },
   {
-    title: "Inbox",
+    title: "Task List",
     url: "task-list",
     icon: Inbox,
   },
   {
-    title: "Search",
+    title: "Monthly Stats",
     url: "monthly-stats",
     icon: Search,
   },
   {
-    title: "Settings",
-    url: "#",
+    title: "Test Connection",
+    url: "test-connection",
     icon: Settings,
   },
 ]
@@ -40,7 +41,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Blotz Task App</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -57,6 +58,17 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <a href="/api/auth/signout">
+                  <span>Sign Out</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
     </Sidebar>
   )
 }
