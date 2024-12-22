@@ -26,10 +26,11 @@ const config: Config = {
 		colors: {
 			'primary-light': '#DBE4E9',
 			'primary-dark': '#2C3233',
-			secondary: {
-				DEFAULT: 'hsl(var(--secondary))',
-				foreground: 'hsl(var(--secondary-foreground))'
-			},
+			// secondary: {
+			// 	DEFAULT: 'hsl(var(--secondary))',
+			// 	foreground: 'hsl(var(--secondary-foreground))'
+			// },
+			secondary: '#278291',
 			warn: '#F42F67',
 			'monthly-stats-personal-label': '#fffcc4',
 			'monthly-stats-acadedmic-label': '#a0e4e4',

@@ -8,11 +8,9 @@ import { fetchTaskItemsDueToday } from '@/services/taskService';
 import { Checkbox } from '@/components/ui/checkbox';
 import { completeTaskForToday } from '@/services/taskService';
 
-export default function Dayview() {
+export default function Today() {
   const [incompleteTasks, setIncompleteTasks] = useState<TaskDTO[]>([]);
   
-  
-
   useEffect(() => {
     loadIncompleteTasks();
   }, []);
